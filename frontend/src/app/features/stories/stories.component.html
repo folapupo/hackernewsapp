@@ -1,0 +1,36 @@
+<input
+  type="text"
+  [value]="store.searchTerm()"
+  (input)="onSearchChange($event)"
+  placeholder="Search..."
+/>
+
+<!-- Loading state -->
+@if (store.loading()) {
+  <div>Loading...</div>
+} @else {  
+
+  <!-- Check if stories are present -->
+  @if (store.stories().length > 0) {
+    <ul>
+      @for (story of store.stories(); track story.id) {
+        <li>
+          @if (story.url) {
+            <a [href]="story.url" target="_blank">{{ story.title }}</a>
+          } @else {
+            <span>{{ story.title }}</span>
+          }
+        </li>
+      }
+    </ul>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="store.page() === 1">Previous</button>
+      <span>Page {{ store.page() }}</span>
+      <button (click)="nextPage()">Next</button>
+    </div>
+  } @else {
+    <p>No stories found.</p>
+  }
+
+}
